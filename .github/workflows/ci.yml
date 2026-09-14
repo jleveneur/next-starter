@@ -23,7 +23,7 @@ jobs:
     name: Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # Installs pnpm (from `packageManager`) and Node (from
       # `devEngines.runtime`) in one step, and caches the store.
@@ -32,7 +32,7 @@ jobs:
       # `--frozen-lockfile`, and an out-of-date lockfile has to fail CI rather
       # than be silently resolved. Its `require-lockfile` input would cover
       # this, but that is unreleased — collapse these two steps once it ships.
-      - uses: pnpm/setup@v2
+      - uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
         with:
           cache: true
           install: false
@@ -86,9 +86,9 @@ jobs:
       BETTER_AUTH_URL: http://localhost:3000
 
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: pnpm/setup@v2
+      - uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
         with:
           cache: true
           install: false
@@ -124,9 +124,9 @@ jobs:
       RESEND_API_KEY: ""
 
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: pnpm/setup@v2
+      - uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
         with:
           cache: true
           install: false
@@ -136,7 +136,7 @@ jobs:
       - run: pnpm --filter @repo/web test:e2e:install
       - run: pnpm test:e2e
 
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: failure()
         with:
           name: playwright-report
