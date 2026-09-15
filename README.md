@@ -123,7 +123,7 @@ Roles and what they grant live in one file, `packages/authz/src/index.ts`:
 ```ts
 export const statement = {
   ...defaultStatements, // organization, member, invitation
-  post: ["create", "delete"], // your resources go here
+  post: ["create", "delete"] // your resources go here
 } as const
 ```
 
@@ -308,9 +308,9 @@ const form = useForm({
   defaultValues: { email: "", password: "" },
   validators: {
     onSubmit: schema,
-    onSubmitAsync: ({ value }) => submitToServer(() => authClient.signIn.email(value)),
+    onSubmitAsync: ({ value }) => submitToServer(() => authClient.signIn.email(value))
   },
-  onSubmit: () => router.push("/dashboard"),
+  onSubmit: () => router.push("/dashboard")
 })
 ```
 
