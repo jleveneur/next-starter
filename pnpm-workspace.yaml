@@ -85,7 +85,7 @@ catalog:
   class-variance-authority: 0.7.1
   # shadcn's own class-merger: one compiled dependency in place of clsx and
   # tailwind-merge, and what its registry components import by default.
-  cn: 0.2.6
+  cn: 0.4.0
 
   # --- Testing --------------------------------------------------------------
   vitest: 4.1.11
@@ -100,3 +100,4 @@ minimumReleaseAgeExclude:
   - "@orpc/shared@2.0.0-beta.33"
   - "@orpc/tanstack-query@2.0.0-beta.33"
   - resend@6.28.0
+  - "@shadcn/lint@0.2.0"

@@ -5,7 +5,8 @@ and nothing that only some projects need.
 
 - **[Next.js](https://nextjs.org)** (App Router) and **TypeScript**
 - **[Turborepo](https://turborepo.com)** + **pnpm** workspaces
-- **[Oxlint + Oxfmt](https://oxc.rs)** for linting and formatting
+- **[Oxlint + Oxfmt](https://oxc.rs)** for linting and formatting, with
+  **[@shadcn/lint](https://github.com/shadcn-ui/lint)** for design-system class rules
 - **[Tailwind CSS](https://tailwindcss.com)** + **[shadcn/ui](https://ui.shadcn.com)**
 - **[Drizzle ORM](https://orm.drizzle.team)** + PostgreSQL
 - **[oRPC](https://orpc.unnoq.com)** for the typed API
