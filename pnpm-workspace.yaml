@@ -61,9 +61,9 @@ catalog:
   # --- API transport --------------------------------------------------------
   # 2.x is still the `beta` dist-tag; pin the exact beta and upgrade server and
   # client together.
-  "@orpc/server": 2.0.0-beta.35
-  "@orpc/client": 2.0.0-beta.35
-  "@orpc/tanstack-query": 2.0.0-beta.35
+  "@orpc/server": 2.0.0-beta.37
+  "@orpc/client": 2.0.0-beta.37
+  "@orpc/tanstack-query": 2.0.0-beta.37
   "@tanstack/react-query": 5.102.0
 
   # --- React & Next ---------------------------------------------------------
