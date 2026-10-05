@@ -34,7 +34,7 @@ allowBuilds:
 catalog:
   # --- Language & runtime types --------------------------------------------
   typescript: 7.0.2
-  "@types/node": 24.13.6
+  "@types/node": 24.19.1
 
   # --- Validation -----------------------------------------------------------
   # Used by @repo/env and by every oRPC input schema.
