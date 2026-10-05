@@ -38,7 +38,7 @@ catalog:
 
   # --- Validation -----------------------------------------------------------
   # Used by @repo/env and by every oRPC input schema.
-  zod: 4.4.3
+  zod: 4.6.5
   # Environment validation. Talks to Zod through Standard Schema, so it does not
   # pin a Zod major of its own.
   "@t3-oss/env-nextjs": 0.13.11
@@ -53,7 +53,7 @@ catalog:
   better-auth: 1.6.25
 
   # --- Email ----------------------------------------------------------------
-  resend: 6.28.0
+  resend: 6.32.0
 
   # --- Logging --------------------------------------------------------------
   pino: 10.3.1
@@ -64,12 +64,12 @@ catalog:
   "@orpc/server": 2.0.0-beta.37
   "@orpc/client": 2.0.0-beta.37
   "@orpc/tanstack-query": 2.0.0-beta.37
-  "@tanstack/react-query": 5.102.0
+  "@tanstack/react-query": 5.104.0
 
   # --- React & Next ---------------------------------------------------------
-  next: 16.3.4
-  react: 19.2.8
-  "react-dom": 19.2.8
+  next: 16.3.8
+  react: 19.3.0
+  "react-dom": 19.3.0
   "@types/react": 19.3.0
   "@types/react-dom": 19.3.0
 
@@ -81,7 +81,7 @@ catalog:
   "@tanstack/react-form": 1.33.5
 
   # Primitive layer behind the shadcn/ui components in @repo/ui.
-  "@base-ui/react": 1.7.0
+  "@base-ui/react": 1.8.0
   class-variance-authority: 0.7.1
   # shadcn's own class-merger: one compiled dependency in place of clsx and
   # tailwind-merge, and what its registry components import by default.
