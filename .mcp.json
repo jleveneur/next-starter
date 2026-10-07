@@ -9,6 +9,7 @@
       "args": ["dlx", "@playwright/mcp@latest", "--browser", "chromium"]
     },
     "reui": {
+      "type": "http",
       "url": "https://mcp.reui.io"
     },
     "shadcn": {
