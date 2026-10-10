@@ -16,9 +16,9 @@
     "test:e2e:install": "playwright install --with-deps chromium"
   },
   "dependencies": {
-    "@orpc/client": "2.0.0-beta.37",
-    "@orpc/server": "2.0.0-beta.37",
-    "@orpc/tanstack-query": "2.0.0-beta.37",
+    "@orpc/client": "2.0.0-beta.42",
+    "@orpc/server": "2.0.0-beta.42",
+    "@orpc/tanstack-query": "2.0.0-beta.42",
     "@repo/api": "workspace:*",
     "@repo/auth": "workspace:*",
     "@repo/authz": "workspace:*",
