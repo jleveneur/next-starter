@@ -8,28 +8,28 @@ this is a condensed set of rules, not an explanation of why they exist.
 ## 1. Before you finish
 
 ```bash
-pnpm check
+bun run check
 ```
 
 Format check, type-aware lint, typecheck, Knip (dead code), React Doctor, and
-unit tests. CI runs the same six plus `pnpm build`. If a failure looks
+unit tests. CI runs the same six plus `bun run build`. If a failure looks
 pre-existing, confirm that on a clean tree instead of assuming.
 
-Faster individual loops: `pnpm format`, `pnpm lint`, `pnpm typecheck`,
-`pnpm knip`, `pnpm react-doctor`, `pnpm test`.
+Faster individual loops: `bun run format`, `bun run lint`, `bun run typecheck`,
+`bun run knip`, `bun run react-doctor`, `bun run test`.
 
-`pnpm check` deliberately excludes the two suites that need a database. Run
+`bun run check` deliberately excludes the two suites that need a database. Run
 them when the change warrants it:
 
-- `pnpm test:integration` after touching the schema, Better Auth's
+- `bun run test:integration` after touching the schema, Better Auth's
   configuration, or a procedure's guards. It is the only thing that exercises
   the adapter and the permission rows together.
-- `pnpm test:e2e` after touching a page, a form, or an email. It is the only
+- `bun run test:e2e` after touching a page, a form, or an email. It is the only
   thing that follows a link out of an email the way a person would.
 
 Lefthook also runs formatting and syntax-only lint on commit, commitlint on the
 message, and affected typecheck and tests on push. They are a convenience, not
-the gate — do not treat a green hook as a substitute for `pnpm check`.
+the gate — do not treat a green hook as a substitute for `bun run check`.
 
 ---
 
@@ -86,7 +86,7 @@ context.organizationId)` is the tenant boundary; leaving it out is a data
 
 ## 4. Non-negotiables
 
-These fail `pnpm check`, so there is no version of "just for now":
+These fail `bun run check`, so there is no version of "just for now":
 
 - **No `any`.** Use `unknown` and narrow. No non-null assertions (`!`).
 - **No unawaited promises.** A floating promise in a request handler is silent
@@ -120,7 +120,7 @@ These fail `pnpm check`, so there is no version of "just for now":
   explicit in the schema.
 - React Server Components by default; `"use client"` only where interactivity
   requires it.
-- Design-system components from `@repo/ui` keep their own appearance. `pnpm lint`
+- Design-system components from `@repo/ui` keep their own appearance. `bun run lint`
   errors on `className` restyles (`shadcn/no-restyle`), raw palette colors,
   arbitrary values, inline styles, unknown classes, and class
   strings the linter cannot read. Layout classes such as `w-full` and `mt-4`
@@ -135,9 +135,17 @@ The bar is high and deliberate.
 
 1. Check it is not already solved by something in the workspace.
 2. Add it to the package that uses it — never to the root.
-3. Use `catalog:` and add the version to `pnpm-workspace.yaml`.
+3. If another package already depends on it, use the same version. Renovate
+   bumps every copy of a dependency in one PR, so they stay in step.
 4. Pin exact versions. No ranges — Renovate proposes the bumps.
-5. Run `pnpm knip`. An unused dependency is a failing check, not a warning.
+5. Run `bun run knip`. An unused dependency is a failing check, not a warning.
+
+Install scripts execute arbitrary code, so they only run for packages listed
+in `trustedDependencies` — today just `esbuild`, which drizzle-kit needs for its
+CLI. Lefthook's own postinstall stays blocked on purpose: the root `prepare`
+script installs the hooks without clobbering a local one. `bun pm untrusted`
+lists what was blocked; trust a package only when it does not work without its
+script.
 
 **This repository is a starter, and its scope is a feature.** Redis, object
 storage, email, payments, queues, analytics, error tracking, feature flags, and
