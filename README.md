@@ -48,7 +48,7 @@ and Supabase provide — with `DATABASE_URL` pointing at it.
 
 Bun installs the packages; Node runs Next.js and the tooling. Its version is
 pinned once, in `devEngines.runtime` in `package.json`: CI's `setup-node` reads
-it from there, and locally any Node 24 works (`nvm install 24.19.0` for the
+it from there, and locally any Node 24 works (`nvm install 24.21.0` for the
 exact one). That is why there is no `.nvmrc`: a second pin drifts without
 telling you.
 
