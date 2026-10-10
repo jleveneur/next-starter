@@ -4,7 +4,7 @@ A minimal, production-ready foundation. It has the pieces every project needs
 and nothing that only some projects need.
 
 - **[Next.js](https://nextjs.org)** (App Router) and **TypeScript**
-- **[Turborepo](https://turborepo.com)** + **pnpm** workspaces
+- **[Turborepo](https://turborepo.com)** + **[Bun](https://bun.com)** workspaces
 - **[Oxlint + Oxfmt](https://oxc.rs)** for linting and formatting, with
   **[@shadcn/lint](https://github.com/shadcn-ui/lint)** for design-system class rules
 - **[Tailwind CSS](https://tailwindcss.com)** + **[shadcn/ui](https://ui.shadcn.com)**
@@ -24,18 +24,18 @@ and nothing that only some projects need.
 ## Getting started
 
 ```bash
-pnpm install
+bun install
 cp .env.example .env      # then edit BETTER_AUTH_SECRET
-pnpm db:start             # Postgres in a container
-pnpm db:migrate           # apply migrations
-pnpm dev                  # http://localhost:3000
+bun run db:start             # Postgres in a container
+bun run db:migrate           # apply migrations
+bun run dev                  # http://localhost:3000
 ```
 
 All you need is a PostgreSQL 13 or newer database reachable at `DATABASE_URL`.
 [compose.yml](compose.yml) is one way to get one — a single service, on the
 image CI uses, with the credentials already in `.env.example`, so a fresh clone
 runs without edits. A local install or a hosted instance works just as well:
-point `DATABASE_URL` at it and skip `pnpm db:start`.
+point `DATABASE_URL` at it and skip `bun run db:start`.
 
 If another project already holds port 5432, set `POSTGRES_PORT` in `.env` and
 change the port in `DATABASE_URL` to match.
@@ -46,11 +46,11 @@ long-running server. On a serverless platform every warm instance keeps its own
 pool, so you want a pooler in front of Postgres — PgBouncer, or the one Neon
 and Supabase provide — with `DATABASE_URL` pointing at it.
 
-You do **not** need nvm or a matching Node installed. `devEngines.runtime` in
-`package.json` pins the version, and `pnpm install` downloads it, records its
-checksum in the lockfile, and runs every script against it. That is why there
-is no `.nvmrc`: a file that only some tools read is a version pin that drifts
-without telling you.
+Bun installs the packages; Node runs Next.js and the tooling. Its version is
+pinned once, in `devEngines.runtime` in `package.json`: CI's `setup-node` reads
+it from there, and locally any Node 24 works (`nvm install 24.19.0` for the
+exact one). That is why there is no `.nvmrc`: a second pin drifts without
+telling you.
 
 ## Layout
 
@@ -96,22 +96,22 @@ them through `transpilePackages`; Vitest and `tsc` read them directly.
 
 ## Commands
 
-| Command                     | What it does                                      |
-| --------------------------- | ------------------------------------------------- |
-| `pnpm dev`                  | Next dev server                                   |
-| `pnpm build`                | Production build                                  |
-| `pnpm check`                | The full local gate — everything below plus tests |
-| `pnpm lint` / `pnpm format` | Oxlint (type-aware) / Oxfmt                       |
-| `pnpm typecheck`            | `tsc --noEmit` in every package                   |
-| `pnpm knip`                 | Unused files, exports, and dependencies           |
-| `pnpm react-doctor`         | React and accessibility diagnostics               |
-| `pnpm test`                 | Vitest — pure logic, no services                  |
-| `pnpm test:integration`     | Vitest against a real database                    |
-| `pnpm test:e2e`             | Playwright browser journeys                       |
-| `pnpm db:start` / `db:stop` | Postgres in a container, via `compose.yml`        |
-| `pnpm db:generate`          | Generate a migration from `schema.ts`             |
-| `pnpm db:migrate`           | Apply pending migrations                          |
-| `pnpm db:studio`            | Drizzle Studio                                    |
+| Command                           | What it does                                      |
+| --------------------------------- | ------------------------------------------------- |
+| `bun run dev`                     | Next dev server                                   |
+| `bun run build`                   | Production build                                  |
+| `bun run check`                   | The full local gate — everything below plus tests |
+| `bun run lint` / `bun run format` | Oxlint (type-aware) / Oxfmt                       |
+| `bun run typecheck`               | `tsc --noEmit` in every package                   |
+| `bun run knip`                    | Unused files, exports, and dependencies           |
+| `bun run react-doctor`            | React and accessibility diagnostics               |
+| `bun run test`                    | Vitest — pure logic, no services                  |
+| `bun run test:integration`        | Vitest against a real database                    |
+| `bun run test:e2e`                | Playwright browser journeys                       |
+| `bun run db:start` / `db:stop`    | Postgres in a container, via `compose.yml`        |
+| `bun run db:generate`             | Generate a migration from `schema.ts`             |
+| `bun run db:migrate`              | Apply pending migrations                          |
+| `bun run db:studio`               | Drizzle Studio                                    |
 
 ## Organizations and permissions
 
@@ -190,7 +190,7 @@ Next's bundler does not reliably carry through a build. For a readable local
 stream, pipe it:
 
 ```bash
-pnpm dev | pnpm dlx pino-pretty
+bun run dev | bunx pino-pretty
 ```
 
 Failed procedures are logged by the RPC route — rejections a caller earned at
@@ -201,36 +201,36 @@ and the like) is still yours to add; this gets you the trace to attach to it.
 
 Three suites, split by what they need.
 
-`pnpm test` is pure logic — environment rules, role grants, procedure guards.
+`bun run test` is pure logic — environment rules, role grants, procedure guards.
 It runs in under a second and needs nothing.
 
-`pnpm test:integration` is the seam the first suite cannot reach: Better Auth
+`bun run test:integration` is the seam the first suite cannot reach: Better Auth
 writing through the Drizzle adapter, the session hook resolving an
 organization, and a permission check reading the member row it just wrote.
 That wiring is what an upstream version bump breaks silently, and no amount of
 typechecking sees it. It needs a database with migrations applied:
 
 ```bash
-pnpm db:migrate && pnpm test:integration
+bun run db:migrate && bun run test:integration
 ```
 
-`pnpm test:e2e` drives a real browser against a production build: signing up
+`bun run test:e2e` drives a real browser against a production build: signing up
 and following the confirmation link, resetting a password, inviting someone and
 having them join, and checking that a member sees no controls their role
 forbids — then calling the procedure anyway and being refused. Playwright
 starts the server itself; you supply the database.
 
 ```bash
-pnpm --filter @repo/web test:e2e:install   # once, downloads chromium
-pnpm db:migrate && pnpm test:e2e
+bun run --cwd apps/web test:e2e:install   # once, downloads chromium
+bun run db:migrate && bun run test:e2e
 ```
 
-CI runs both against a Postgres service container. `pnpm check` runs neither —
+CI runs both against a Postgres service container. `bun run check` runs neither —
 a gate that needs a database is a gate people learn to skip.
 
 ## Git hooks
 
-Lefthook installs three hooks on `pnpm install`, kept fast enough that nobody
+Lefthook installs three hooks on `bun install`, kept fast enough that nobody
 reaches for `--no-verify`:
 
 - **pre-commit** — Oxfmt on staged files (fixes are re-staged) and syntax-only
@@ -240,7 +240,7 @@ reaches for `--no-verify`:
 - **pre-push** — typecheck and tests, for affected packages only.
 
 Type-aware lint, Knip, and React Doctor need the whole program, so they live in
-`pnpm check` and CI rather than in a per-file hook.
+`bun run check` and CI rather than in a per-file hook.
 
 ## Environment
 
@@ -269,7 +269,7 @@ component belongs in the shared package, writes it to `packages/ui`, and fixes
 the imports across the workspace boundary:
 
 ```bash
-pnpm dlx shadcn@latest add dialog -c apps/web
+bunx shadcn@latest add dialog -c apps/web
 ```
 
 Both workspaces need a `components.json` with matching `style`, `baseColor`,
@@ -335,7 +335,7 @@ The style is `base-nova`, so [ReUI](https://reui.io) components install through
 the same CLI:
 
 ```bash
-cd packages/ui && pnpm dlx shadcn@latest add @reui/data-grid
+cd packages/ui && bunx shadcn@latest add @reui/data-grid
 ```
 
 Its free components need nothing; premium blocks need a `REUI_LICENSE_KEY`.
@@ -372,10 +372,10 @@ whether anything has been deployed yet:
 
 ```bash
 # Nothing deployed — start your own history.
-rm -rf packages/db/migrations && pnpm db:generate
+rm -rf packages/db/migrations && bun run db:generate
 
 # Already deployed — add a migration that drops the table.
-pnpm db:generate
+bun run db:generate
 ```
 
 The first gives you a single `0000` containing your schema and none of this
