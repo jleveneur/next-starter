@@ -1,5 +1,10 @@
 # Next.js monorepo starter
 
+> [!IMPORTANT]
+> This repository is archived. The starter now lives in
+> [jleveneur/jleveneur](https://github.com/jleveneur/jleveneur): create a project with
+> `bun run new-project <directory>` from there.
+
 A minimal, production-ready foundation. It has the pieces every project needs
 and nothing that only some projects need.
 
